@@ -1,12 +1,11 @@
 ---
-title: "NOAA Storm Events Database Analysis"
-date: "Monday, April 20, 2015"
 output: 
   html_document:
     keep_md: true
 ---
 
-## An analysis of weather events and their impact on human health and economics
+# NOAA Storm Events Database Analysis
+### An Analysis of Weather Events and Their Impact on Human Health and Economics in the United States
 
 ## Synopsis
 This document represents an analysis of the National Oceanic and Atmospheric
@@ -30,17 +29,18 @@ library(dplyr)
 
 #### Initial Setup
 ```{r}
-if(!(file.exists("./data") & file.info("./data")$isdir)) dir.create("./data")
-download.file(
-    paste0("https://d396qusza40orc.cloudfront.net/"
-           ,"repdata%2Fdata%2FStormData.csv.bz2"
-    )
-    ,destfile = "./data/repdata_data_FStormData.csv.bz2"
-)
-write(date(), file = "./data/date_downloaded.txt")
+## if(!(file.exists("./data") & file.info("./data")$isdir)) dir.create("./data")
+## download.file(
+##     paste0("https://d396qusza40orc.cloudfront.net/"
+##            ,"repdata%2Fdata%2FStormData.csv.bz2"
+##     )
+##     ,destfile = "./data/repdata_data_FStormData.csv.bz2"
+## )
+## write(date(), file = "./data/date_downloaded.txt")
 ```
 This code block creates a subdirectory for the data, downloads the data and
-creates a file to document the time the data was acquired.
+creates a file to document the time the data was acquired.  It is commented out
+to be used as an example only.
 
 #### Loading and Preprocessing the Data
 ```{r}
@@ -106,18 +106,25 @@ NAs, generally following the "three significant digits" guidance as cited above.
 However, the *PROPDMGEXP* and *CROPDMGEXP* variables contain some observations
 outside of the expected values "K", "M" and "B."  For this analysis the *damage*
 variable represents the sum of the values expressed in the aforementioned
-variables for each observation where exponents are in the expected values set.
-Thus, each observation of *damage* will be the sum of (*PROPDMG* * 
-*PROPDMGEXP*) + (*CROPDMG* * *CROPDMGEXP*) for each observation where
+damage variables for each observation where exponents are in the expected values
+set. Thus, each observation of *damage* will be the sum of (*PROPDMG* * 
+*PROPDMGEXP*) and (*CROPDMG* * *CROPDMGEXP*) for each observation where
 *PROPDMGEXP* or *CROPDMGEXP* is "K", "M" or "B."  Exponent values with
 unexpected values and any additional information contained in *REMARKS* are
-ignored.
+ignored (not calculated in *damage*).
 
 - Creating a variable (*casualties*) to sum values from the *FATALITIES* and
 *INJURIES* variables.  FUrther information about fatalities and injuries is
 located in Section 2.6 of the NWS Directive 10-1605[3].
 
 ## Results
+```{r}
+## 1. Across the United States, which types of events (as indicated in the 
+## EVTYPE variable) are most harmful with respect to population health?
+## 2. Across the United States, which types of events have the greatest economic
+## consequences?
+
+```
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  
