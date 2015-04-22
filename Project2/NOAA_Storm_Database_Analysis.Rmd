@@ -23,7 +23,7 @@ consequences.
 #### Load Required Libraries
 ```{r}
 library(ggplot2)
-library(grid)
+library(scales)
 library(dplyr)
 ```
 
@@ -121,10 +121,80 @@ located in Section 2.6 of the NWS Directive 10-1605[3].
 ```{r}
 ## 1. Across the United States, which types of events (as indicated in the 
 ## EVTYPE variable) are most harmful with respect to population health?
+
+cData <- data %>% 
+    group_by(EVTYPE) %>% 
+    summarize(casualties = sum(casualties)) %>%
+    arrange(desc(casualties)) %>%
+    top_n(10, casualties)
+
+cData$EVTYPE <- factor(cData$EVTYPE, levels = cData$EVTYPE)
+
+plot1 <- qplot(
+    cData$EVTYPE
+    ,cData$casualties
+    ,geom = c("bar")
+    ,stat = "identity"
+    ,main = "Top 10 Weather Events Ranked by Human Casualties (1996-2011)"
+    ,xlab = "Weather Event Type"
+    ,ylab = "Human Casualties (Fatalities/Injuries)"
+) + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    geom_text(
+        aes(
+            label = format(cData$casualties, big.mark = ",")
+            ,vjust = -.5
+        )
+        ,size = 4
+    )
+print(plot1)
+```
+This figure plots the top 10 weather event types ranked by the human casualties
+(fatalities and injuries) inflicted by them in the United States from 1996-2011
+as described in the *Data Processing* section above. The top two ranking weather
+event types (TORNADO and EXCESSIVE HEAT) outweigh the casualties caused by the
+trailing eight weather event types combined.
+
+```{r}
 ## 2. Across the United States, which types of events have the greatest economic
 ## consequences?
 
+eData <- data %>% 
+    group_by(EVTYPE) %>% 
+    summarize(damage = sum(damage)) %>%
+    arrange(desc(damage)) %>%
+    top_n(10, damage)
+
+eData$EVTYPE <- factor(eData$EVTYPE, levels = eData$EVTYPE)
+
+plot2 <- qplot(
+    eData$EVTYPE
+    ,round(eData$damage / 1e+06)
+    ,geom = c("bar")
+    ,stat = "identity"
+    ,main = "Top 10 Weather Events Ranked by Economic Impact (1996-2011)"
+    ,xlab = "Weather Event Type"
+    ,ylab = "Economic Impact (USD in Millions)"
+) + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    geom_text(
+        aes(
+            label = paste0(
+                "$"
+                ,format(round(eData$damage/1e+06), big.mark = ",")
+            )
+            ,vjust = -.5
+        )
+        ,size = 4
+    ) +
+    scale_y_continuous(labels = comma)
+print(plot2)
 ```
+This figure plots the top 10 weather event types ranked by their total economic
+impact in the United States from 1996-2011 as described in the *Data Processing*
+section above. Labels are in millions of USD ($).  The top two ranking weather
+event types (FLOOD and HURRICANE/TYPHOON) outweigh the economic impact of the
+trailing eight combined.
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  
