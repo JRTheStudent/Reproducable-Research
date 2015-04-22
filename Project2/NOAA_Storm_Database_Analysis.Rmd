@@ -146,7 +146,7 @@ plot1 <- qplot(
     geom_text(
         aes(
             label = format(cData$casualties, big.mark = ",")
-            ,vjust = -.3
+            ,vjust = -.2
         )
         ,size = 3
     )
@@ -192,7 +192,7 @@ plot2 <- qplot(
                 "$"
                 ,format(round(eData$damage/1e+06), big.mark = ",")
             )
-            ,vjust = -.5
+            ,vjust = -.2
         )
         ,size = 3
     ) +
