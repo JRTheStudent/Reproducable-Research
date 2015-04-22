@@ -21,13 +21,6 @@ consequences.
 library(ggplot2)    # Plotting (qplot)
 library(grid)       # Plotting (grid.arrange)
 library(gridExtra)  # Plotting (grid.arrange)
-```
-
-```
-## Warning: package 'gridExtra' was built under R version 3.1.3
-```
-
-```r
 library(scales)     # Number formatting (labels = comma)
 library(dplyr)      # Data manipulation (filter, mutate, group_by, etc.)
 ```

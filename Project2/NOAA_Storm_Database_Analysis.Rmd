@@ -21,7 +21,7 @@ consequences.
 ## Data Processing
 
 #### Load Required Libraries
-```{r "libraries", message = F}
+```{r "libraries", message = F, warning = F}
 library(ggplot2)    # Plotting (qplot)
 library(grid)       # Plotting (grid.arrange)
 library(gridExtra)  # Plotting (grid.arrange)
