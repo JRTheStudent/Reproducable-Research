@@ -264,8 +264,9 @@ print(fig3)
 
 Figure 3 essentially plots the same data from figures 1 and 2, except
 instead of leveraging a bar chart aggregated over the time period (1996-2011) it
-utilizes a categorical line chart (discrete lines for each weather event type)
-with summations by year and a log(10) Y-axis scale to visualize trending.
+utilizes a categorical line chart (discrete lines for each of the respective
+top 10 weather event types) with summations by year and a log(10) Y-axis scale
+to visualize trending.
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  
