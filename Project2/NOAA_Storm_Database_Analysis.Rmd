@@ -154,7 +154,7 @@ plot1 <- qplot(
 
 print(plot1)
 ```
-This figure plots the top 10 weather event types ranked by the human casualties
+Figure 1 plots the top 10 weather event types ranked by the human casualties
 (fatalities and injuries) inflicted by them in the United States from 1996-2011
 as described in the *Data Processing* section above. The top two ranking weather
 event types (TORNADO and EXCESSIVE HEAT) outweigh the casualties caused by the
@@ -196,7 +196,7 @@ plot2 <- qplot(
 
 print(plot2)
 ```
-This figure plots the top 10 weather event types ranked by their total economic
+Figure 2 plots the top 10 weather event types ranked by their total economic
 impact in the United States from 1996-2011 as described in the *Data Processing*
 section above. Labels are in millions of USD ($).  The top two ranking weather
 event types (FLOOD and HURRICANE/TYPHOON) outweigh the economic impact of the
@@ -244,10 +244,10 @@ plot4 <- qplot(
 
 grid.arrange(plot3, plot4, ncol = 1)
 ```
-This figure essentially plots the same data from figures 1 and 2, except
+Figure 3 essentially plots the same data from figures 1 and 2, except
 instead of leveraging a bar chart aggregated over the time period (1996-2011) it
 utilizes a categorical line chart (discrete lines for each weather event type)
-with sums by year.
+with summations by year to visualize trending.
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  

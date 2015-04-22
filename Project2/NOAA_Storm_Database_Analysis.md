@@ -1,7 +1,6 @@
-# NOAA Storm Events Database Analysis
-Monday, April 20, 2015  
 
-## An analysis of weather events and their impact on human health and economics
+# NOAA Storm Events Database Analysis
+### An Analysis of Weather Events and Their Impact on Human Health and Economics in the United States
 
 ## Synopsis
 This document represents an analysis of the National Oceanic and Atmospheric
@@ -20,7 +19,7 @@ consequences.
 
 ```r
 library(ggplot2)
-library(grid)
+library(scales)
 library(dplyr)
 ```
 
@@ -40,59 +39,62 @@ library(dplyr)
 #### Initial Setup
 
 ```r
-# if(!(file.exists("./data") & file.info("./data")$isdir)) dir.create("./data")
-# download.file(
-#     paste0("https://d396qusza40orc.cloudfront.net/"
-#            ,"repdata%2Fdata%2FStormData.csv.bz2"
-#            )
-#     ,destfile = "./data/repdata_data_FStormData.csv.bz2"
-# )
-# write(date(), file = "./data/date_downloaded.txt")
+## if(!(file.exists("./data") & file.info("./data")$isdir)) dir.create("./data")
+## download.file(
+##     paste0("https://d396qusza40orc.cloudfront.net/"
+##            ,"repdata%2Fdata%2FStormData.csv.bz2"
+##     )
+##     ,destfile = "./data/repdata_data_FStormData.csv.bz2"
+## )
+## write(date(), file = "./data/date_downloaded.txt")
 ```
 This code block creates a subdirectory for the data, downloads the data and
-creates a file to document the time the data was acquired.
+creates a file to document the time the data was acquired.  It is commented out
+to be used as an example only.
 
 #### Loading and Preprocessing the Data
 
 ```r
-# data <- read.csv(bzfile("./data/repdata_data_FStormData.csv.bz2"))
-# data$date <- as.Date(data$BGN_DATE, "%m/%d/%Y")
-# data <- filter(data, date > "1996-01-01")
-# data$damage = 0
-# for(i in 1:nrow(data)){
-#     if(data[[i,"PROPDMGEXP"]] == "K"){
-#         data[[i,"damage"]] <- data[[i,"damage"]] + 
-#             (data[[i,"PROPDMG"]] * 1000)
-#     }
-#     else if(data[[i,"PROPDMGEXP"]] == "M"){
-#         data[[i,"damage"]] <- data[[i,"damage"]] + 
-#             (data[[i,"PROPDMG"]] * 1000000)
-#     }
-#     else if(data[[i,"PROPDMGEXP"]] == "B"){
-#         data[[i,"damage"]] <- data[[i,"damage"]] + 
-#             (data[[i,"PROPDMG"]] * 1000000000)
-#     }
-#     if(data[[i,"CROPDMGEXP"]] == "K"){
-#         data[[i,"damage"]] <- data[[i,"damage"]] + 
-#             (data[[i,"CROPDMG"]] * 1000)
-#     }
-#     else if(data[[i,"CROPDMGEXP"]] == "M"){
-#         data[[i,"damage"]] <- data[[i,"damage"]] + 
-#             (data[[i,"CROPDMG"]] * 1000000)
-#     }
-#     else if(data[[i,"CROPDMGEXP"]] == "B"){
-#         data[[i,"damage"]] <- data[[i,"damage"]] + 
-#             (data[[i,"CROPDMG"]] * 1000000000)
-#     }
-# }
-
-# data <- mutate(data, casualties = FATALITIES + INJURIES)
+data <- read.csv(bzfile("./data/repdata_data_FStormData.csv.bz2"))
+data$date <- as.Date(data$BGN_DATE, "%m/%d/%Y")
+data$year <- as.integer(substr(data$date,1,4))
+data <- filter(data, date > "1996-01-01")
+data$damage = 0
+for(i in 1:nrow(data)){
+    if(data[[i,"PROPDMGEXP"]] == "K"){
+        data[[i,"damage"]] <- data[[i,"damage"]] + 
+            (data[[i,"PROPDMG"]] * 1000)
+    }
+    else if(data[[i,"PROPDMGEXP"]] == "M"){
+        data[[i,"damage"]] <- data[[i,"damage"]] + 
+            (data[[i,"PROPDMG"]] * 1000000)
+    }
+    else if(data[[i,"PROPDMGEXP"]] == "B"){
+        data[[i,"damage"]] <- data[[i,"damage"]] + 
+            (data[[i,"PROPDMG"]] * 1000000000)
+    }
+    if(data[[i,"CROPDMGEXP"]] == "K"){
+        data[[i,"damage"]] <- data[[i,"damage"]] + 
+            (data[[i,"CROPDMG"]] * 1000)
+    }
+    else if(data[[i,"CROPDMGEXP"]] == "M"){
+        data[[i,"damage"]] <- data[[i,"damage"]] + 
+            (data[[i,"CROPDMG"]] * 1000000)
+    }
+    else if(data[[i,"CROPDMGEXP"]] == "B"){
+        data[[i,"damage"]] <- data[[i,"damage"]] + 
+            (data[[i,"CROPDMG"]] * 1000000000)
+    }
+}
+data <- mutate(data, casualties = FATALITIES + INJURIES)
 ```
 This code block loads the data and executes several preprocessing steps to
 facilitate subsequent analysis.  Preprocessing steps include:  
 
 - Creating a variable (*date*) by coercing the *BGN_DATE* column to the Date
 class.
+
+-Creating a variable (*year*) derived from *date* to facilitate plotting.
 
 - Excluding data prior to 1996 via the filter function.  This is motivated by
 information conveyed on the Storm Event Database details page[2] which states
@@ -104,8 +106,8 @@ prior to 1996 the analysis ensures equal consideration for all event types.
 from damage or loss to private property, public infrastructure and crops.
 Damage estimates are represented within the data in the variables *PROPDMG*
 (Property Damage), *PROPDMGEXP* (Property Damage Exponent), *CROPDMG* (Crop
-Damage) and *CROPDMGEXP* (Crop Damage Exponent).  
-Per Section 2.7 of the NWS Directive 10-1605[3],
+Damage) and *CROPDMGEXP* (Crop Damage Exponent).  Per Section 2.7 of the NWS
+Directive 10-1605[3],
 
 > Estimates should be rounded to three significant digits, followed by an
 alphabetical character signifying the magnitude of the number, i.e., 1.55B for
@@ -118,18 +120,129 @@ NAs, generally following the "three significant digits" guidance as cited above.
 However, the *PROPDMGEXP* and *CROPDMGEXP* variables contain some observations
 outside of the expected values "K", "M" and "B."  For this analysis the *damage*
 variable represents the sum of the values expressed in the aforementioned
-variables for each observation where exponents are in the expected values set.
-Thus, each observation of *damage* will be the sum of (*PROPDMG* * 
-*PROPDMGEXP*) + (*CROPDMG* * *CROPDMGEXP*) for each observation where
+damage variables for each observation where exponents are in the expected values
+set. Thus, each observation of *damage* will be the sum of (*PROPDMG* * 
+*PROPDMGEXP*) and (*CROPDMG* * *CROPDMGEXP*) for each observation where
 *PROPDMGEXP* or *CROPDMGEXP* is "K", "M" or "B."  Exponent values with
 unexpected values and any additional information contained in *REMARKS* are
-ignored.
+ignored (not calculated in *damage*).
 
 - Creating a variable (*casualties*) to sum values from the *FATALITIES* and
 *INJURIES* variables.  FUrther information about fatalities and injuries is
 located in Section 2.6 of the NWS Directive 10-1605[3].
 
 ## Results
+
+```r
+## 1. Across the United States, which types of events (as indicated in the 
+## EVTYPE variable) are most harmful with respect to population health?
+
+cData <- data %>% 
+    group_by(EVTYPE) %>% 
+    summarize(casualties = sum(casualties)) %>%
+    arrange(desc(casualties)) %>%
+    top_n(10, casualties)
+
+cData$EVTYPE <- factor(cData$EVTYPE, levels = cData$EVTYPE)
+
+plot1 <- qplot(
+    cData$EVTYPE
+    ,cData$casualties
+    ,geom = c("bar")
+    ,stat = "identity"
+    ,main = "Top 10 Weather Events Ranked by Human Casualties (1996-2011)"
+    ,xlab = "Weather Event Type"
+    ,ylab = "Human Casualties (Fatalities/Injuries)"
+) + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    geom_text(
+        aes(
+            label = format(cData$casualties, big.mark = ",")
+            ,vjust = -.5
+        )
+        ,size = 4
+    )
+print(plot1)
+```
+
+![](NOAA_Storm_Database_Analysis_files/figure-html/unnamed-chunk-4-1.png) 
+This figure plots the top 10 weather event types ranked by the human casualties
+(fatalities and injuries) inflicted by them in the United States from 1996-2011
+as described in the *Data Processing* section above. The top two ranking weather
+event types (TORNADO and EXCESSIVE HEAT) outweigh the casualties caused by the
+trailing eight weather event types combined.
+
+
+```r
+## 2. Across the United States, which types of events have the greatest economic
+## consequences?
+
+eData <- data %>% 
+    group_by(EVTYPE) %>% 
+    summarize(damage = sum(damage)) %>%
+    arrange(desc(damage)) %>%
+    top_n(10, damage)
+
+eData$EVTYPE <- factor(eData$EVTYPE, levels = eData$EVTYPE)
+
+plot2 <- qplot(
+    eData$EVTYPE
+    ,round(eData$damage / 1e+06)
+    ,geom = c("bar")
+    ,stat = "identity"
+    ,main = "Top 10 Weather Events Ranked by Economic Impact (1996-2011)"
+    ,xlab = "Weather Event Type"
+    ,ylab = "Economic Impact (USD in Millions)"
+) + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    geom_text(
+        aes(
+            label = paste0(
+                "$"
+                ,format(round(eData$damage/1e+06), big.mark = ",")
+            )
+            ,vjust = -.5
+        )
+        ,size = 4
+    ) +
+    scale_y_continuous(labels = comma)
+print(plot2)
+```
+
+![](NOAA_Storm_Database_Analysis_files/figure-html/unnamed-chunk-5-1.png) 
+This figure plots the top 10 weather event types ranked by their total economic
+impact in the United States from 1996-2011 as described in the *Data Processing*
+section above. Labels are in millions of USD ($).  The top two ranking weather
+event types (FLOOD and HURRICANE/TYPHOON) outweigh the economic impact of the
+trailing eight combined.
+
+
+```r
+# cYData <- data %>% 
+#     group_by(EVTYPE, year) %>% 
+#     summarize(casualties = sum(casualties)) %>%
+#     arrange(desc(casualties)) %>%
+#     top_n(10, casualties)
+# 
+# plot3 <- qplot(
+#     cYData$year
+#     ,cData$casualties
+#     ,geom = c("bar")
+#     ,stat = "identity"
+#     ,main = "Top 10 Weather Events Ranked by Human Casualties (1996-2011)"
+#     ,xlab = "Weather Event Type"
+#     ,ylab = "Human Casualties (Fatalities/Injuries)"
+# ) + 
+#     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+#     geom_text(
+#         aes(
+#             label = format(cData$casualties, big.mark = ",")
+#             ,vjust = -.5
+#         )
+#         ,size = 4
+#     )
+# print(plot3)
+```
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  
