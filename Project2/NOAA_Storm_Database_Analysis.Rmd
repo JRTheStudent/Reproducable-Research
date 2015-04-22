@@ -146,7 +146,7 @@ plot1 <- qplot(
     geom_text(
         aes(
             label = format(cData$casualties, big.mark = ",")
-            ,vjust = -.5
+            ,vjust = -.3
         )
         ,size = 3
     )
