@@ -18,9 +18,11 @@ consequences.
 #### Load Required Libraries
 
 ```r
-library(ggplot2)
-library(scales)
-library(dplyr)
+library(ggplot2)    # Plotting (qplot)
+library(grid)       # Plotting (grid.arrange)
+library(gridExtra)  # Plotting (grid.arrange)
+library(scales)     # Number formatting (labels = comma)
+library(dplyr)      # Data manipulation (filter, mutate, group_by, etc.)
 ```
 
 ```
@@ -60,32 +62,26 @@ data$date <- as.Date(data$BGN_DATE, "%m/%d/%Y")
 data$year <- as.integer(substr(data$date,1,4))
 data <- filter(data, date > "1996-01-01")
 data$damage = 0
-for(i in 1:nrow(data)){
-    if(data[[i,"PROPDMGEXP"]] == "K"){
-        data[[i,"damage"]] <- data[[i,"damage"]] + 
-            (data[[i,"PROPDMG"]] * 1000)
-    }
-    else if(data[[i,"PROPDMGEXP"]] == "M"){
-        data[[i,"damage"]] <- data[[i,"damage"]] + 
-            (data[[i,"PROPDMG"]] * 1000000)
-    }
-    else if(data[[i,"PROPDMGEXP"]] == "B"){
-        data[[i,"damage"]] <- data[[i,"damage"]] + 
-            (data[[i,"PROPDMG"]] * 1000000000)
-    }
-    if(data[[i,"CROPDMGEXP"]] == "K"){
-        data[[i,"damage"]] <- data[[i,"damage"]] + 
-            (data[[i,"CROPDMG"]] * 1000)
-    }
-    else if(data[[i,"CROPDMGEXP"]] == "M"){
-        data[[i,"damage"]] <- data[[i,"damage"]] + 
-            (data[[i,"CROPDMG"]] * 1000000)
-    }
-    else if(data[[i,"CROPDMGEXP"]] == "B"){
-        data[[i,"damage"]] <- data[[i,"damage"]] + 
-            (data[[i,"CROPDMG"]] * 1000000000)
-    }
-}
+
+data[data$PROPDMGEXP == "K",] <- data %>% 
+    filter(PROPDMGEXP == "K") %>%
+	mutate(damage = damage + PROPDMG * 1e3)
+data[data$PROPDMGEXP == "M",] <- data %>% 
+	filter(PROPDMGEXP == "M") %>%
+	mutate(damage = damage + PROPDMG * 1e6)
+data[data$PROPDMGEXP == "B",] <- data %>% 
+	filter(PROPDMGEXP == "B") %>%
+	mutate(damage = damage + PROPDMG * 1e9)
+data[data$CROPDMGEXP == "K",] <- data %>% 
+	filter(CROPDMGEXP == "K") %>%
+	mutate(damage = damage + CROPDMG * 1e3)
+data[data$CROPDMGEXP == "M",] <- data %>% 
+	filter(CROPDMGEXP == "M") %>%
+	mutate(damage = damage + CROPDMG * 1e6)
+data[data$CROPDMGEXP == "B",] <- data %>% 
+	filter(CROPDMGEXP == "B") %>%
+	mutate(damage = damage + CROPDMG * 1e9)
+
 data <- mutate(data, casualties = FATALITIES + INJURIES)
 ```
 This code block loads the data and executes several preprocessing steps to
@@ -127,7 +123,7 @@ set. Thus, each observation of *damage* will be the sum of (*PROPDMG* *
 unexpected values and any additional information contained in *REMARKS* are
 ignored (not calculated in *damage*).
 
-- Creating a variable (*casualties*) to sum values from the *FATALITIES* and
+- Creating a variable (*casualties*) to summate values from the *FATALITIES* and
 *INJURIES* variables.  FUrther information about fatalities and injuries is
 located in Section 2.6 of the NWS Directive 10-1605[3].
 
@@ -146,8 +142,9 @@ cData <- data %>%
 cData$EVTYPE <- factor(cData$EVTYPE, levels = cData$EVTYPE)
 
 plot1 <- qplot(
-    cData$EVTYPE
-    ,cData$casualties
+    EVTYPE
+    ,casualties
+    ,data = cData
     ,geom = c("bar")
     ,stat = "identity"
     ,main = "Top 10 Weather Events Ranked by Human Casualties (1996-2011)"
@@ -160,13 +157,14 @@ plot1 <- qplot(
             label = format(cData$casualties, big.mark = ",")
             ,vjust = -.5
         )
-        ,size = 4
+        ,size = 3
     )
+
 print(plot1)
 ```
 
-![](NOAA_Storm_Database_Analysis_files/figure-html/unnamed-chunk-4-1.png) 
-This figure plots the top 10 weather event types ranked by the human casualties
+![](NOAA_Storm_Database_Analysis_files/figure-html/results1-1.png) 
+Figure 1 plots the top 10 weather event types ranked by the human casualties
 (fatalities and injuries) inflicted by them in the United States from 1996-2011
 as described in the *Data Processing* section above. The top two ranking weather
 event types (TORNADO and EXCESSIVE HEAT) outweigh the casualties caused by the
@@ -186,9 +184,10 @@ eData <- data %>%
 eData$EVTYPE <- factor(eData$EVTYPE, levels = eData$EVTYPE)
 
 plot2 <- qplot(
-    eData$EVTYPE
-    ,round(eData$damage / 1e+06)
-    ,geom = c("bar")
+    EVTYPE
+    ,round(damage / 1e+06)
+    ,data = eData
+    ,geom = "bar"
     ,stat = "identity"
     ,main = "Top 10 Weather Events Ranked by Economic Impact (1996-2011)"
     ,xlab = "Weather Event Type"
@@ -203,14 +202,15 @@ plot2 <- qplot(
             )
             ,vjust = -.5
         )
-        ,size = 4
+        ,size = 3
     ) +
     scale_y_continuous(labels = comma)
+
 print(plot2)
 ```
 
-![](NOAA_Storm_Database_Analysis_files/figure-html/unnamed-chunk-5-1.png) 
-This figure plots the top 10 weather event types ranked by their total economic
+![](NOAA_Storm_Database_Analysis_files/figure-html/results2-1.png) 
+Figure 2 plots the top 10 weather event types ranked by their total economic
 impact in the United States from 1996-2011 as described in the *Data Processing*
 section above. Labels are in millions of USD ($).  The top two ranking weather
 event types (FLOOD and HURRICANE/TYPHOON) outweigh the economic impact of the
@@ -218,31 +218,54 @@ trailing eight combined.
 
 
 ```r
-# cYData <- data %>% 
-#     group_by(EVTYPE, year) %>% 
-#     summarize(casualties = sum(casualties)) %>%
-#     arrange(desc(casualties)) %>%
-#     top_n(10, casualties)
-# 
-# plot3 <- qplot(
-#     cYData$year
-#     ,cData$casualties
-#     ,geom = c("bar")
-#     ,stat = "identity"
-#     ,main = "Top 10 Weather Events Ranked by Human Casualties (1996-2011)"
-#     ,xlab = "Weather Event Type"
-#     ,ylab = "Human Casualties (Fatalities/Injuries)"
-# ) + 
-#     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-#     geom_text(
-#         aes(
-#             label = format(cData$casualties, big.mark = ",")
-#             ,vjust = -.5
-#         )
-#         ,size = 4
-#     )
-# print(plot3)
+cYData <- data %>%
+    filter(EVTYPE %in% cData$EVTYPE) %>%
+    group_by(EVTYPE, year) %>% 
+    summarize(casualties = sum(casualties))
+
+cYData$EVTYPE <- factor(cYData$EVTYPE, levels = cData$EVTYPE)
+
+plot3 <- qplot(
+    year
+    ,casualties
+    ,data = cYData # <----------- Change this above if it works
+    ,geom = "line"
+    ,color = EVTYPE
+    ,main = "Top 10 Weather Events Ranked by Human Casualties (1996-2011)"
+    ,xlab = "Year"
+    ,ylab = "Human Casualties (Fatalities/Injuries)"
+) + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_y_log10(labels = comma)
+
+eYData <- data %>%
+    filter(EVTYPE %in% eData$EVTYPE) %>%
+    group_by(EVTYPE, year) %>% 
+    summarize(damage = sum(damage))
+
+eYData$EVTYPE <- factor(eYData$EVTYPE, levels = eData$EVTYPE)
+
+plot4 <- qplot(
+    year
+    ,round(damage / 1e+06)
+    ,data = eYData
+    ,geom = "line"
+    ,color = EVTYPE
+    ,main = "Top 10 Weather Events Ranked by Economic Impact (1996-2011)"
+    ,xlab = "Year"
+    ,ylab = "Economic Impact (USD in Millions)"
+) + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_y_log10(labels = comma)
+
+grid.arrange(plot3, plot4, ncol = 1)
 ```
+
+![](NOAA_Storm_Database_Analysis_files/figure-html/results3-1.png) 
+Figure 3 essentially plots the same data from figures 1 and 2, except
+instead of leveraging a bar chart aggregated over the time period (1996-2011) it
+utilizes a categorical line chart (discrete lines for each weather event type)
+with summations by year and a log(10) Y-axis scale to visualize trending.
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  
