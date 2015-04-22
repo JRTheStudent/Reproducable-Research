@@ -79,7 +79,7 @@ facilitate subsequent analysis.  Preprocessing steps include:
 - Creating a variable (*date*) by coercing the *BGN_DATE* column to the Date
 class.
 
--Creating a variable (*year*) derived from *date* to facilitate plotting.
+- Creating a variable (*year*) derived from *date* to facilitate plotting.
 
 - Excluding data prior to 1996 via the filter function.  This is motivated by
 information conveyed on the Storm Event Database details page[2] which states

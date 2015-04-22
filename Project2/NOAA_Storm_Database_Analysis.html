@@ -114,10 +114,8 @@ data[data$CROPDMGEXP == &quot;B&quot;,] &lt;- data %&gt;%
 data &lt;- mutate(data, casualties = FATALITIES + INJURIES)</code></pre>
 <p>This code block loads the data and executes several preprocessing steps to facilitate subsequent analysis. Preprocessing steps include:</p>
 <ul>
-<li>Creating a variable (<em>date</em>) by coercing the <em>BGN_DATE</em> column to the Date class.</li>
-</ul>
-<p>-Creating a variable (<em>year</em>) derived from <em>date</em> to facilitate plotting.</p>
-<ul>
+<li><p>Creating a variable (<em>date</em>) by coercing the <em>BGN_DATE</em> column to the Date class.</p></li>
+<li><p>Creating a variable (<em>year</em>) derived from <em>date</em> to facilitate plotting.</p></li>
 <li><p>Excluding data prior to 1996 via the filter function. This is motivated by information conveyed on the Storm Event Database details page[2] which states that data prior to 1996 only contain a subset of the 48 event types that have been documented in the subsequent data (1996 to current). By excluding data prior to 1996 the analysis ensures equal consideration for all event types.</p></li>
 <li><p>Creating a singe variable (<em>damage</em>) to quantify economic impact resulting from damage or loss to private property, public infrastructure and crops. Damage estimates are represented within the data in the variables <em>PROPDMG</em> (Property Damage), <em>PROPDMGEXP</em> (Property Damage Exponent), <em>CROPDMG</em> (Crop Damage) and <em>CROPDMGEXP</em> (Crop Damage Exponent). Per Section 2.7 of the NWS Directive 10-1605[3],</p></li>
 </ul>
