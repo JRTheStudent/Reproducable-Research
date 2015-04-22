@@ -19,8 +19,8 @@ consequences.
 
 ```r
 library(ggplot2)    # Plotting (qplot)
-library(grid)       # Plotting (grid.arrange)
-library(gridExtra)  # Plotting (grid.arrange)
+library(grid)       # Plotting (library gridExtra)
+library(gridExtra)  # Plotting (arrangeGrob)
 library(scales)     # Number formatting (labels = comma)
 library(dplyr)      # Data manipulation (filter, mutate, group_by, etc.)
 ```
