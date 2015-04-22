@@ -106,12 +106,12 @@ variable represents the sum of the values expressed in the aforementioned
 damage variables for each observation where exponents are in the expected values
 set. Thus, each observation of *damage* will be the sum of (*PROPDMG* * 
 *PROPDMGEXP*) and (*CROPDMG* * *CROPDMGEXP*) for each observation where
-*PROPDMGEXP* or *CROPDMGEXP* is "K", "M" or "B."  Exponent values with
-unexpected values and any additional information contained in *REMARKS* are
-ignored (not calculated in *damage*).
+*PROPDMGEXP* or *CROPDMGEXP* is "K", "M" or "B."  Exponens with unexpected
+values and any additional information contained in *REMARKS* are ignored (not
+calculated in *damage*).
 
 - Creating a variable (*casualties*) to summate values from the *FATALITIES* and
-*INJURIES* variables.  FUrther information about fatalities and injuries is
+*INJURIES* variables.  Further information about fatalities and injuries is
 located in Section 2.6 of the NWS Directive 10-1605[3].
 
 ## Results
