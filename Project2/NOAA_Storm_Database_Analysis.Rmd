@@ -22,9 +22,10 @@ consequences.
 
 #### Load Required Libraries
 ```{r}
-library(ggplot2)
-library(scales)
-library(dplyr)
+library(ggplot2)    # Plotting (qplot)
+library(grid)       # Plotting (grid.arrange)
+library(scales)     # Number formatting (labels = comma)
+library(dplyr)      # Data manipulation (filter, mutate, group_by, etc.)
 ```
 
 #### Initial Setup
@@ -43,9 +44,10 @@ creates a file to document the time the data was acquired.  It is commented out
 to be used as an example only.
 
 #### Loading and Preprocessing the Data
-```{r}
+```{r cache = T}
 data <- read.csv(bzfile("./data/repdata_data_FStormData.csv.bz2"))
 data$date <- as.Date(data$BGN_DATE, "%m/%d/%Y")
+data$year <- as.integer(substr(data$date,1,4))
 data <- filter(data, date > "1996-01-01")
 data$damage = 0
 for(i in 1:nrow(data)){
@@ -81,6 +83,8 @@ facilitate subsequent analysis.  Preprocessing steps include:
 
 - Creating a variable (*date*) by coercing the *BGN_DATE* column to the Date
 class.
+
+-Creating a variable (*year*) derived from *date* to facilitate plotting.
 
 - Excluding data prior to 1996 via the filter function.  This is motivated by
 information conveyed on the Storm Event Database details page[2] which states
@@ -147,6 +151,7 @@ plot1 <- qplot(
         )
         ,size = 4
     )
+
 print(plot1)
 ```
 This figure plots the top 10 weather event types ranked by the human casualties
@@ -170,7 +175,7 @@ eData$EVTYPE <- factor(eData$EVTYPE, levels = eData$EVTYPE)
 plot2 <- qplot(
     eData$EVTYPE
     ,round(eData$damage / 1e+06)
-    ,geom = c("bar")
+    ,geom = "bar"
     ,stat = "identity"
     ,main = "Top 10 Weather Events Ranked by Economic Impact (1996-2011)"
     ,xlab = "Weather Event Type"
@@ -188,6 +193,7 @@ plot2 <- qplot(
         ,size = 4
     ) +
     scale_y_continuous(labels = comma)
+
 print(plot2)
 ```
 This figure plots the top 10 weather event types ranked by their total economic
@@ -195,6 +201,51 @@ impact in the United States from 1996-2011 as described in the *Data Processing*
 section above. Labels are in millions of USD ($).  The top two ranking weather
 event types (FLOOD and HURRICANE/TYPHOON) outweigh the economic impact of the
 trailing eight combined.
+
+```{r}
+cYData <- data %>%
+    filter(EVTYPE %in% cData$EVTYPE) %>%
+    group_by(EVTYPE, year) %>% 
+    summarize(casualties = sum(casualties)) %>%
+
+cYData$EVTYPE <- factor(cYData$EVTYPE, levels = cData$EVTYPE)
+
+plot3 <- qplot(
+    year
+    ,casualties
+    ,data = cYData # <----------- Change this above if it works
+    ,geom = "line"
+    ,color = EVTYPE
+    ,main = "Top 10 Weather Events Ranked by Human Casualties (1996-2011)"
+    ,xlab = "Year"
+    ,ylab = "Human Casualties (Fatalities/Injuries)"
+) + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+
+eYData <- data %>%
+    filter(EVTYPE %in% eData$EVTYPE) %>%
+    group_by(EVTYPE, year) %>% 
+    summarize(damage = sum(damage)) %>%
+
+eYData$EVTYPE <- factor(eYData$EVTYPE, levels = eData$EVTYPE)
+
+plot4 <- qplot(
+    year
+    ,round(damage / 1e+06)
+    ,data = eYData
+    ,geom = "line"
+    ,color = EVTYPE
+    ,main = "Top 10 Weather Events Ranked by Economic Impact (1996-2011)"
+    ,xlab = "Year"
+    ,ylab = "Economic Impact (USD in Millions)"
+) + 
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_y_continuous(labels = comma)
+
+grid.arrange(plot3, plot4, ncol = 1)
+```
+This figure essentially plots the same data from the two plots above, except
+instead of an aggregate bar chart it 
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  
