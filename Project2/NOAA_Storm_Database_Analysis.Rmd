@@ -117,7 +117,7 @@ set. Thus, each observation of *damage* will be the sum of (*PROPDMG* *
 unexpected values and any additional information contained in *REMARKS* are
 ignored (not calculated in *damage*).
 
-- Creating a variable (*casualties*) to sum values from the *FATALITIES* and
+- Creating a variable (*casualties*) to summate values from the *FATALITIES* and
 *INJURIES* variables.  FUrther information about fatalities and injuries is
 located in Section 2.6 of the NWS Directive 10-1605[3].
 
@@ -244,8 +244,10 @@ plot4 <- qplot(
 
 grid.arrange(plot3, plot4, ncol = 1)
 ```
-This figure essentially plots the same data from the two plots above, except
-instead of an aggregate bar chart it 
+This figure essentially plots the same data from figures 1 and 2, except
+instead of leveraging a bar chart aggregated over the time period (1996-2011) it
+utilizes a categorical line chart (discrete lines for each weather event type)
+with sums by year.
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  
