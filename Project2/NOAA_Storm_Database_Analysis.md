@@ -256,7 +256,9 @@ plot4 <- qplot(
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     scale_y_log10(labels = comma)
 
-grid.arrange(plot3, plot4, ncol = 1)
+#grid.arrange(plot3, plot4, ncol = 1)
+fig3 <- arrangeGrob(plot3, plot4, ncol = 1)
+print(fig3)
 ```
 
 ![](NOAA_Storm_Database_Analysis_files/figure-html/results3-1.png) 
