@@ -135,7 +135,7 @@ plot1 <- qplot(
     ,data = cData
     ,geom = c("bar")
     ,stat = "identity"
-    ,main = "Top 10 Weather Events Ranked by Human Casualties (1996-2011)"
+    ,main = "Fig. 1\nTop 10 Weather Events Ranked by Human Casualties (1996-2011)"
     ,xlab = "Weather Event Type"
     ,ylab = "Human Casualties (Fatalities/Injuries)"
 ) + 
@@ -175,7 +175,7 @@ plot2 <- qplot(
     ,data = eData
     ,geom = "bar"
     ,stat = "identity"
-    ,main = "Top 10 Weather Events Ranked by Economic Impact (1996-2011)"
+    ,main = "Fig. 2\nTop 10 Weather Events Ranked by Economic Impact (1996-2011)"
     ,xlab = "Weather Event Type"
     ,ylab = "Economic Impact (USD in Millions)"
 ) + 
@@ -242,7 +242,7 @@ plot4 <- qplot(
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     scale_y_log10(labels = comma)
 
-grid.arrange(plot3, plot4, ncol = 1)
+grid.arrange(plot3, plot4, ncol = 1, main = "Fig.3")
 ```
 
 Figure 3 essentially plots the same data from figures 1 and 2, except
