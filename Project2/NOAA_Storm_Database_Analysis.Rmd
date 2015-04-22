@@ -5,7 +5,7 @@ output:
 ---
 
 # NOAA Storm Events Database Analysis
-### An Analysis of Weather Events and Their Impact on Human Health and Economics in the United States
+### An Analysis of Weather Events and Their Impact on <br />Human Health and Economics in the United States
 
 ## Synopsis
 This document represents an analysis of the National Oceanic and Atmospheric
@@ -21,7 +21,7 @@ consequences.
 ## Data Processing
 
 #### Load Required Libraries
-```{r "libraries", warning = F}
+```{r "libraries", message = F}
 library(ggplot2)    # Plotting (qplot)
 library(grid)       # Plotting (grid.arrange)
 library(gridExtra)  # Plotting (grid.arrange)
@@ -45,7 +45,7 @@ creates a file to document the time the data was acquired.  It is commented out
 to be used as an example only.
 
 #### Loading and Preprocessing the Data
-```{r "load_preprocess"}
+```{r "load_preprocess", cache = T}
 data <- read.csv(bzfile("./data/repdata_data_FStormData.csv.bz2"))
 data$date <- as.Date(data$BGN_DATE, "%m/%d/%Y")
 data$year <- as.integer(substr(data$date,1,4))
@@ -150,6 +150,7 @@ plot1 <- qplot(
 
 print(plot1)
 ```
+
 Figure 1 plots the top 10 weather event types ranked by the human casualties
 (fatalities and injuries) inflicted by them in the United States from 1996-2011
 as described in the *Data Processing* section above. The top two ranking weather
@@ -193,13 +194,14 @@ plot2 <- qplot(
 
 print(plot2)
 ```
+
 Figure 2 plots the top 10 weather event types ranked by their total economic
 impact in the United States from 1996-2011 as described in the *Data Processing*
 section above. Labels are in millions of USD ($).  The top two ranking weather
 event types (FLOOD and HURRICANE/TYPHOON) outweigh the economic impact of the
 trailing eight combined.
 
-```{r "results3", fig.height = 14}
+```{r "results3", fig.height = 14, fig.width=9}
 cYData <- data %>%
     filter(EVTYPE %in% cData$EVTYPE) %>%
     group_by(EVTYPE, year) %>% 
@@ -242,6 +244,7 @@ plot4 <- qplot(
 
 grid.arrange(plot3, plot4, ncol = 1)
 ```
+
 Figure 3 essentially plots the same data from figures 1 and 2, except
 instead of leveraging a bar chart aggregated over the time period (1996-2011) it
 utilizes a categorical line chart (discrete lines for each weather event type)

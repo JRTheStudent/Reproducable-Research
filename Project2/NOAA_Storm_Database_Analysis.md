@@ -1,6 +1,6 @@
 
 # NOAA Storm Events Database Analysis
-### An Analysis of Weather Events and Their Impact on Human Health and Economics in the United States
+### An Analysis of Weather Events and Their Impact on <br />Human Health and Economics in the United States
 
 ## Synopsis
 This document represents an analysis of the National Oceanic and Atmospheric
@@ -21,6 +21,13 @@ consequences.
 library(ggplot2)    # Plotting (qplot)
 library(grid)       # Plotting (grid.arrange)
 library(gridExtra)  # Plotting (grid.arrange)
+```
+
+```
+## Warning: package 'gridExtra' was built under R version 3.1.3
+```
+
+```r
 library(scales)     # Number formatting (labels = comma)
 library(dplyr)      # Data manipulation (filter, mutate, group_by, etc.)
 ```
@@ -164,6 +171,7 @@ print(plot1)
 ```
 
 ![](NOAA_Storm_Database_Analysis_files/figure-html/results1-1.png) 
+
 Figure 1 plots the top 10 weather event types ranked by the human casualties
 (fatalities and injuries) inflicted by them in the United States from 1996-2011
 as described in the *Data Processing* section above. The top two ranking weather
@@ -210,6 +218,7 @@ print(plot2)
 ```
 
 ![](NOAA_Storm_Database_Analysis_files/figure-html/results2-1.png) 
+
 Figure 2 plots the top 10 weather event types ranked by their total economic
 impact in the United States from 1996-2011 as described in the *Data Processing*
 section above. Labels are in millions of USD ($).  The top two ranking weather
@@ -262,6 +271,7 @@ grid.arrange(plot3, plot4, ncol = 1)
 ```
 
 ![](NOAA_Storm_Database_Analysis_files/figure-html/results3-1.png) 
+
 Figure 3 essentially plots the same data from figures 1 and 2, except
 instead of leveraging a bar chart aggregated over the time period (1996-2011) it
 utilizes a categorical line chart (discrete lines for each weather event type)
