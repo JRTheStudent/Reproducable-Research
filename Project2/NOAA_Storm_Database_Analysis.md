@@ -224,7 +224,10 @@ plot3 <- qplot(
     ,data = cYData # <----------- Change this above if it works
     ,geom = "line"
     ,color = EVTYPE
-    ,main = "Top 10 Weather Events Ranked by Human Casualties (1996-2011)"
+    ,main = paste(
+        "Figure 3:\n\nTop 10 Weather Events Ranked"
+        ," by Human Casualties (1996-2011)"
+    )
     ,xlab = "Year"
     ,ylab = "Human Casualties (Fatalities/Injuries)"
 ) + 
@@ -251,7 +254,7 @@ plot4 <- qplot(
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     scale_y_log10(labels = comma)
 
-grid.arrange(plot3, plot4, ncol = 1, main = "Figure 3")
+grid.arrange(plot3, plot4, ncol = 1)
 ```
 
 ![](NOAA_Storm_Database_Analysis_files/figure-html/results3-1.png) 
