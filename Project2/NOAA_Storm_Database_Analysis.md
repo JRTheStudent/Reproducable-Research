@@ -207,9 +207,9 @@ print(plot2)
 
 Figure 2 plots the top 10 weather event types ranked by their total economic
 impact in the United States from 1996-2011 as described in the *Data Processing*
-section above. Labels are in millions of USD ($).  The top two ranking weather
-event types (FLOOD and HURRICANE/TYPHOON) outweigh the economic impact of the
-trailing eight combined.
+section above. Labels and the Y-axis are in millions of USD ($).  The top two
+ranking weather event types (FLOOD and HURRICANE/TYPHOON) outweigh the economic
+impact of the trailing eight combined.
 
 
 ```r
