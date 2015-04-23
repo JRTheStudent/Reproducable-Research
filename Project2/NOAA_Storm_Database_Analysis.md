@@ -1,6 +1,9 @@
 
 # NOAA Storm Events Database Analysis
-### An Analysis of Weather Events and Their Impact on <br />Human Health and Economics in the United States
+
+### Title
+An Analysis of Weather Events and Their Impact on Human Health and Economics in
+the United States
 
 ## Synopsis
 This document represents an analysis of the National Oceanic and Atmospheric
