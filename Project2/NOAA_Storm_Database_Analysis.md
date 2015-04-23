@@ -14,7 +14,12 @@ injuries or death), property damage, disruption to commerce, media attention
 and/or significant meteorological events (e.g. record temperatures or
 precipitation).  This analysis focuses on the weather events that are most
 harmful with respect to human health and result in the greatest economic
-consequences.
+consequences. This analysis contains two primary sections, Data Processing and
+Results.  Data Processing describes the steps required to process the data
+including rationale for the data transformations and inclusions for Analysis.
+The Analysis section presents three figures visualizing various aspects of the
+top 10 weather event types from 1996-2011 resulting in the largest number of
+human casualties and economic impact.
 
 ## Data Processing
 
