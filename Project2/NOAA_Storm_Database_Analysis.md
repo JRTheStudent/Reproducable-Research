@@ -27,8 +27,6 @@ human casualties and economic impact.
 
 ```r
 library(ggplot2)    # Plotting (qplot)
-library(grid)       # Plotting (library gridExtra)
-library(gridExtra)  # Plotting (arrangeGrob)
 library(scales)     # Number formatting (labels = comma)
 library(dplyr)      # Data manipulation (filter, mutate, group_by, etc.)
 ```
@@ -92,7 +90,7 @@ class.
 - Creating a variable (*damage*) to quantify economic impact resulting from
 damage or loss to private property, public infrastructure and crops.
 
-- Creating a variable (*casualties*) to summate values from the *FATALITIES* and
+- Creating a variable (*casualties*) to sum the values from the *FATALITIES* and
 *INJURIES* variables. Further information about fatalities and injuries is
 located in Section 2.6 of the NWS Directive 10-1605[3].
 

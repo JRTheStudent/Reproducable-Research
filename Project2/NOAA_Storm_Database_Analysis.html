@@ -67,8 +67,6 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="load-required-libraries" class="section level4">
 <h4>Load Required Libraries</h4>
 <pre class="r"><code>library(ggplot2)    # Plotting (qplot)
-library(grid)       # Plotting (library gridExtra)
-library(gridExtra)  # Plotting (arrangeGrob)
 library(scales)     # Number formatting (labels = comma)
 library(dplyr)      # Data manipulation (filter, mutate, group_by, etc.)</code></pre>
 </div>
@@ -118,7 +116,7 @@ data &lt;- mutate(data, casualties = FATALITIES + INJURIES)</code></pre>
 <li><p>Creating a variable (<em>year</em>) derived from <em>date</em> to facilitate plotting.</p></li>
 <li><p>Excluding data prior to 1996.</p></li>
 <li><p>Creating a variable (<em>damage</em>) to quantify economic impact resulting from damage or loss to private property, public infrastructure and crops.</p></li>
-<li><p>Creating a variable (<em>casualties</em>) to summate values from the <em>FATALITIES</em> and <em>INJURIES</em> variables. Further information about fatalities and injuries is located in Section 2.6 of the NWS Directive 10-1605[3].</p></li>
+<li><p>Creating a variable (<em>casualties</em>) to sum the values from the <em>FATALITIES</em> and <em>INJURIES</em> variables. Further information about fatalities and injuries is located in Section 2.6 of the NWS Directive 10-1605[3].</p></li>
 <li><p>Additional information on the rationale for data transformations and exclusions is available in the corresponding section below.</p></li>
 </ul>
 </div>
