@@ -1,7 +1,7 @@
 
 # NOAA Storm Events Database Analysis
 
-### Title
+## Title
 An Analysis of Weather Events and Their Impact on Human Health and Economics in
 the United States
 
