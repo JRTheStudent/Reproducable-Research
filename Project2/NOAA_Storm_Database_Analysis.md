@@ -235,7 +235,7 @@ plot3 <- qplot(
     ,geom = "line"
     ,color = EVTYPE
     ,main = paste(
-        "Figure 3:\n\nTop 10 Weather Events Ranked"
+        "Figure 3:\n\nTop 10 Weather Events Ranked\n"
         ,"by Economic Impact (1996-2011)"
     )
     ,xlab = "Year"
