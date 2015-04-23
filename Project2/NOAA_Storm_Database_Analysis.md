@@ -87,15 +87,29 @@ class.
 
 - Creating a variable (*year*) derived from *date* to facilitate plotting.
 
-- Excluding data prior to 1996 via the filter function.  This is motivated by
-information conveyed on the Storm Event Database details page[2] which states
-that data prior to 1996 only contain a subset of the 48 event types that have
-been documented in the subsequent data (1996 to current).  By excluding data
-prior to 1996 the analysis ensures equal consideration for all event types.
+- Excluding data prior to 1996.
 
-- Creating a singe variable (*damage*) to quantify economic impact resulting
-from damage or loss to private property, public infrastructure and crops.
-Damage estimates are represented within the data in the variables *PROPDMG*
+- Creating a variable (*damage*) to quantify economic impact resulting from
+damage or loss to private property, public infrastructure and crops.
+
+- Creating a variable (*casualties*) to summate values from the *FATALITIES* and
+*INJURIES* variables. Further information about fatalities and injuries is
+located in Section 2.6 of the NWS Directive 10-1605[3].
+
+- Additional information on the rationale for data transformations and
+exclusions is available in the corresponding section below.
+
+## Results
+
+#### Data Transformations and Exclusions
+
+- Data prior to 1996 has been excluded.  This is motivated by information
+conveyed on the Storm Event Database details page[2] which states that data
+prior to 1996 only contain a subset of the 48 event types that have been
+documented in the subsequent data (1996 to current).  By excluding data prior to
+1996 the analysis ensures equal consideration for all event types.
+
+- Damage estimates are represented within the data in the variables *PROPDMG*
 (Property Damage), *PROPDMGEXP* (Property Damage Exponent), *CROPDMG* (Crop
 Damage) and *CROPDMGEXP* (Crop Damage Exponent).  Per Section 2.7 of the NWS
 Directive 10-1605[3],
@@ -118,11 +132,10 @@ set. Thus, each observation of *damage* will be the sum of (*PROPDMG* *
 values and any additional information contained in *REMARKS* are ignored (not
 calculated in *damage*).
 
-- Creating a variable (*casualties*) to summate values from the *FATALITIES* and
-*INJURIES* variables.  Further information about fatalities and injuries is
+- The *asualties* variable represents the sum of the values in the *FATALITIES*
+and *INJURIES* variables. Further information about fatalities and injuries is
 located in Section 2.6 of the NWS Directive 10-1605[3].
 
-## Results
 
 ```r
 ## 1. Across the United States, which types of events (as indicated in the 
@@ -165,9 +178,9 @@ print(plot1)
 
 Figure 1 plots the top 10 weather event types ranked by the human casualties
 (fatalities and injuries) inflicted by them in the United States from 1996-2011
-as described in the *Data Processing* section above. The top two ranking weather
-event types (TORNADO and EXCESSIVE HEAT) outweigh the casualties caused by the
-trailing eight weather event types combined.
+as described in the *Data Transformations and Exclusions* section above. The top
+two ranking weather event types (TORNADO and EXCESSIVE HEAT) outweigh the
+casualties caused by the trailing eight weather event types combined.
 
 
 ```r
@@ -214,10 +227,10 @@ print(plot2)
 ![](NOAA_Storm_Database_Analysis_files/figure-html/results2-1.png) 
 
 Figure 2 plots the top 10 weather event types ranked by their total economic
-impact in the United States from 1996-2011 as described in the *Data Processing*
-section above. Labels and the Y-axis are in millions of USD ($).  The top two
-ranking weather event types (FLOOD and HURRICANE/TYPHOON) outweigh the economic
-impact of the trailing eight combined.
+impact in the United States from 1996-2011 as described in the
+*Data Transformations and Exclusions* section above. Labels and the Y-axis are
+in millions of USD ($).  The top two ranking weather event types (FLOOD and
+HURRICANE/TYPHOON) outweigh the economic impact of the trailing eight combined.
 
 
 ```r
@@ -250,11 +263,15 @@ print(plot3)
 ![](NOAA_Storm_Database_Analysis_files/figure-html/results3-1.png) 
 
 Figure 3 plots the top 10 weather event types ranked by their total economic
-impact in the United States from 1996-2011 as described in the *Data Processing*
-section above. This figure presents the data in a categorical line chart with
-discrete lines for each of the weather event types summed by year with a log(10)
-Y-axis scale to facilitate the visualization of trending and annual
-relationships between the event types.
+impact in the United States from 1996-2011 as described in the
+*Data Transformations and Exclusions* section above. This figure presents the
+data in a categorical line chart with discrete lines for each of the weather
+event types summed by year with a log(10) Y-axis scale to facilitate the
+visualization of trending and annual relationships between the event types.
+While the top two event types FLOOD and HURRICANE/TYPHOON significantly outweigh
+the trailing eight when summated over the entire time period of the analysis,
+this figure demonstrates that there is tremendous annual variability leading to
+some degree of unpredictability each year.
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  
