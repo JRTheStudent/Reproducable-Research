@@ -130,13 +130,15 @@ variable represents the sum of the values expressed in the aforementioned
 damage variables for each observation where exponents are in the expected values
 set. Thus, each observation of *damage* will be the sum of (*PROPDMG* * 
 *PROPDMGEXP*) and (*CROPDMG* * *CROPDMGEXP*) for each observation where
-*PROPDMGEXP* or *CROPDMGEXP* is "K", "M" or "B."  Exponens with unexpected
+*PROPDMGEXP* or *CROPDMGEXP* is "K", "M" or "B."  Exponents with unexpected
 values and any additional information contained in *REMARKS* are ignored (not
 calculated in *damage*).
 
-- The *asualties* variable represents the sum of the values in the *FATALITIES*
+- The *casualties* variable represents the sum of the values in the *FATALITIES*
 and *INJURIES* variables. Further information about fatalities and injuries is
 located in Section 2.6 of the NWS Directive 10-1605[3].
+
+#### Figures
 
 ```{r "results1"}
 ## 1. Across the United States, which types of events (as indicated in the 
@@ -262,9 +264,10 @@ data in a categorical line chart with discrete lines for each of the weather
 event types summed by year with a log(10) Y-axis scale to facilitate the
 visualization of trending and annual relationships between the event types.
 While the top two event types FLOOD and HURRICANE/TYPHOON significantly outweigh
-the trailing eight when summated over the entire time period of the analysis,
-this figure demonstrates that there is tremendous annual variability leading to
-some degree of unpredictability each year.
+the trailing eight when summed over the entire time period of the analysis, this
+figure demonstrates that there is tremendous annual variability leading to
+some degree of unpredictability of the magnitude and relationships between the
+weather event types in any given year.
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  
