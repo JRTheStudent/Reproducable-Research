@@ -221,29 +221,6 @@ impact of the trailing eight combined.
 
 
 ```r
-cYData <- data %>%
-    filter(EVTYPE %in% cData$EVTYPE) %>%
-    group_by(EVTYPE, year) %>% 
-    summarize(casualties = sum(casualties))
-
-cYData$EVTYPE <- factor(cYData$EVTYPE, levels = cData$EVTYPE)
-
-plot3 <- qplot(
-    year
-    ,casualties
-    ,data = cYData # <----------- Change this above if it works
-    ,geom = "line"
-    ,color = EVTYPE
-    ,main = paste(
-        "Figure 3:\n\nTop 10 Weather Events Ranked"
-        ,"by Human Casualties (1996-2011)"
-    )
-    ,xlab = "Year"
-    ,ylab = "Human Casualties (Fatalities/Injuries)"
-) + 
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    scale_y_log10(labels = comma)
-
 eYData <- data %>%
     filter(EVTYPE %in% eData$EVTYPE) %>%
     group_by(EVTYPE, year) %>% 
@@ -251,30 +228,33 @@ eYData <- data %>%
 
 eYData$EVTYPE <- factor(eYData$EVTYPE, levels = eData$EVTYPE)
 
-plot4 <- qplot(
+plot3 <- qplot(
     year
     ,round(damage / 1e+06)
     ,data = eYData
     ,geom = "line"
     ,color = EVTYPE
-    ,main = "Top 10 Weather Events Ranked by Economic Impact (1996-2011)"
+    ,main = paste(
+        "Figure 3:\n\nTop 10 Weather Events Ranked"
+        ,"by Economic Impact (1996-2011)"
+    )
     ,xlab = "Year"
     ,ylab = "Economic Impact (USD in Millions)"
 ) + 
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     scale_y_log10(labels = comma)
 
-fig3 <- arrangeGrob(plot3, plot4, ncol = 1)
-print(fig3)
+print(plot3)
 ```
 
 ![](NOAA_Storm_Database_Analysis_files/figure-html/results3-1.png) 
 
-Figure 3 essentially plots the same data from figures 1 and 2, except
-instead of leveraging a bar chart aggregated over the time period (1996-2011) it
-utilizes a categorical line chart (discrete lines for each of the respective
-top 10 weather event types) with summations by year and a log(10) Y-axis scale
-to visualize trending.
+Figure 3 plots the top 10 weather event types ranked by their total economic
+impact in the United States from 1996-2011 as described in the *Data Processing*
+section above. This figure presents the data in a categorical line chart with
+discrete lines for each of the weather event types summed by year with a log(10)
+Y-axis scale to facilitate the visualization of trending and annual
+relationships between the event types.
 
 ## Reference
 [1] http://www.ncdc.noaa.gov/stormevents/  
